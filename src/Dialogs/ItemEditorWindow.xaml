@@ -1,0 +1,122 @@
+<Window x:Class="Lanceur.ItemEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Bouton" Width="600" SizeToContent="Height"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize"
+        ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        FontFamily="{StaticResource UiFont}" FontSize="13" Foreground="{DynamicResource TextPrimary}"
+        UseLayoutRounding="True">
+    <Border Style="{StaticResource DialogFrame}">
+        <Grid Margin="26,20,26,22">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- En-tête avec aperçu -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Width="56" Height="56" CornerRadius="12" Background="{DynamicResource SurfaceBg}"
+                        BorderBrush="{DynamicResource Stroke}" BorderThickness="1">
+                    <Grid Margin="8">
+                        <TextBlock x:Name="PreviewMonogram" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                        <Image x:Name="PreviewImage" RenderOptions.BitmapScalingMode="HighQuality"/>
+                    </Grid>
+                </Border>
+                <StackPanel Grid.Column="1" Margin="14,0,0,0" VerticalAlignment="Center">
+                    <TextBlock x:Name="HeaderText" Text="Nouveau bouton" FontSize="18" FontWeight="SemiBold"/>
+                    <TextBlock Text="Le bouton peut ouvrir un .exe, un raccourci, un script, un dossier ou une URL."
+                               Style="{StaticResource Hint}" Margin="0,3,0,0"/>
+                </StackPanel>
+                <Button Grid.Column="2" Style="{StaticResource IconButton}" Content="&#xE8BB;" FontSize="10" VerticalAlignment="Top"
+                        IsCancel="True" Click="Cancel_Click" ToolTip="Fermer"/>
+            </Grid>
+
+            <!-- Champs -->
+            <StackPanel Grid.Row="1" Margin="0,8,0,0">
+                <TextBlock Text="NOM DU BOUTON" Style="{StaticResource FieldLabel}"/>
+                <TextBox x:Name="NameBox" Style="{StaticResource ModernTextBox}" Tag="Ex. : Photoshop" TextChanged="Fields_Changed"/>
+
+                <TextBlock Text="PROGRAMME À LANCER" Style="{StaticResource FieldLabel}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="PathBox" Style="{StaticResource ModernTextBox}" Tag="C:\Program Files\…\programme.exe"
+                             TextChanged="Fields_Changed"/>
+                    <Button Grid.Column="1" Style="{StaticResource SecondaryButton}" Content="Parcourir…" Margin="8,0,0,0"
+                            Click="BrowseTarget_Click"/>
+                </Grid>
+
+                <Grid Margin="0,0,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="ARGUMENTS (FACULTATIF)" Style="{StaticResource FieldLabel}"/>
+                        <TextBox x:Name="ArgsBox" Style="{StaticResource ModernTextBox}" Tag="Ex. : --profile travail"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="DOSSIER DE DÉMARRAGE (FACULTATIF)" Style="{StaticResource FieldLabel}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="WorkDirBox" Style="{StaticResource ModernTextBox}" Tag="Dossier du programme"/>
+                            <Button Grid.Column="1" Style="{StaticResource IconButton}" Content="&#xE838;" Margin="4,0,0,0"
+                                    Click="BrowseWorkDir_Click" ToolTip="Choisir un dossier"/>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <TextBlock Text="ICÔNE PERSONNALISÉE (FACULTATIF)" Style="{StaticResource FieldLabel}"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="IconBox" Style="{StaticResource ModernTextBox}" Tag="Icône du programme (.ico, .png, .exe…)"
+                             TextChanged="Fields_Changed"/>
+                    <Button Grid.Column="1" Style="{StaticResource SecondaryButton}" Content="Parcourir…" Margin="8,0,0,0"
+                            Click="BrowseIcon_Click"/>
+                    <Button Grid.Column="2" Style="{StaticResource IconButton}" Content="&#xE894;" Margin="4,0,0,0"
+                            Click="ResetIcon_Click" ToolTip="Revenir à l'icône du programme"/>
+                </Grid>
+
+                <TextBlock Text="COULEUR" Style="{StaticResource FieldLabel}"/>
+                <WrapPanel x:Name="ColorPanel"/>
+
+                <TextBlock Text="GROUPE" Style="{StaticResource FieldLabel}"/>
+                <WrapPanel x:Name="GroupPanel"/>
+
+                <CheckBox x:Name="AdminCheck" Style="{StaticResource SwitchCheckBox}" Margin="0,12,0,0">
+                    <StackPanel>
+                        <TextBlock Text="Exécuter en tant qu'administrateur"/>
+                        <TextBlock Text="Windows demandera une confirmation (UAC) à chaque lancement." Style="{StaticResource Hint}"/>
+                    </StackPanel>
+                </CheckBox>
+
+                <TextBlock x:Name="ErrorText" Foreground="{DynamicResource Danger}" Margin="0,12,0,0" TextWrapping="Wrap"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+
+            <!-- Actions -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Style="{StaticResource SecondaryButton}" Content="Annuler" MinWidth="100" Click="Cancel_Click"/>
+                <Button Style="{StaticResource AccentButton}" Content="Enregistrer" MinWidth="110" Margin="8,0,0,0"
+                        IsDefault="True" Click="Save_Click"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

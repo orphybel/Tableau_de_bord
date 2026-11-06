@@ -1,0 +1,146 @@
+<Window x:Class="Lanceur.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Paramètres" Width="620" Height="700"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize"
+        ShowInTaskbar="False" WindowStartupLocation="CenterOwner"
+        FontFamily="{StaticResource UiFont}" FontSize="13" Foreground="{DynamicResource TextPrimary}"
+        UseLayoutRounding="True">
+    <Border Style="{StaticResource DialogFrame}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Margin="26,20,18,6">
+                <Button DockPanel.Dock="Right" Style="{StaticResource IconButton}" Content="&#xE8BB;" FontSize="10"
+                        IsCancel="True" Click="Cancel_Click" ToolTip="Fermer"/>
+                <TextBlock Text="Paramètres" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+            </DockPanel>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="26,0,20,10">
+                <StackPanel>
+                    <!-- Apparence -->
+                    <TextBlock Text="Apparence" Style="{StaticResource SectionTitle}" Margin="0,8,0,4"/>
+
+                    <TextBlock Text="TITRE DU TABLEAU DE BORD" Style="{StaticResource FieldLabel}"/>
+                    <TextBox x:Name="TitleBox" Style="{StaticResource ModernTextBox}" Tag="Mon tableau de bord"/>
+
+                    <TextBlock Text="THÈME" Style="{StaticResource FieldLabel}"/>
+                    <WrapPanel>
+                        <RadioButton x:Name="ThemeDark" Style="{StaticResource PillRadio}" GroupName="Theme" Content="Sombre"/>
+                        <RadioButton x:Name="ThemeLight" Style="{StaticResource PillRadio}" GroupName="Theme" Content="Clair"/>
+                        <RadioButton x:Name="ThemeSystem" Style="{StaticResource PillRadio}" GroupName="Theme" Content="Comme Windows"/>
+                    </WrapPanel>
+
+                    <TextBlock Text="COULEUR D'ACCENTUATION" Style="{StaticResource FieldLabel}"/>
+                    <WrapPanel x:Name="AccentPanel" VerticalAlignment="Center">
+                    </WrapPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                        <TextBlock Text="Personnalisée :" Style="{StaticResource Hint}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                        <TextBox x:Name="AccentBox" Style="{StaticResource ModernTextBox}" Width="120"
+                                 Tag="#RRGGBB" TextChanged="AccentBox_TextChanged"/>
+                        <Border x:Name="AccentPreview" Width="22" Height="22" CornerRadius="11" Margin="10,0,0,0"
+                                BorderBrush="{DynamicResource Stroke}" BorderThickness="1" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <TextBlock Text="TAILLE DES TUILES" Style="{StaticResource FieldLabel}"/>
+                    <WrapPanel>
+                        <RadioButton x:Name="SizeSmall" Style="{StaticResource PillRadio}" GroupName="Size" Content="Petites"/>
+                        <RadioButton x:Name="SizeMedium" Style="{StaticResource PillRadio}" GroupName="Size" Content="Moyennes"/>
+                        <RadioButton x:Name="SizeLarge" Style="{StaticResource PillRadio}" GroupName="Size" Content="Grandes"/>
+                    </WrapPanel>
+
+                    <!-- Comportement -->
+                    <TextBlock Text="Comportement" Style="{StaticResource SectionTitle}"/>
+
+                    <CheckBox x:Name="TopmostCheck" Style="{StaticResource SwitchCheckBox}">
+                        <StackPanel>
+                            <TextBlock Text="Toujours au premier plan"/>
+                            <TextBlock Text="La fenêtre reste au-dessus des autres." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox x:Name="MinimizeAfterLaunchCheck" Style="{StaticResource SwitchCheckBox}">
+                        <StackPanel>
+                            <TextBlock Text="Masquer après un lancement"/>
+                            <TextBlock Text="Le tableau de bord se range dès qu'une application est lancée." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox x:Name="TrayCheck" Style="{StaticResource SwitchCheckBox}" Checked="Tray_Changed" Unchecked="Tray_Changed">
+                        <StackPanel>
+                            <TextBlock Text="Icône dans la zone de notification"/>
+                            <TextBlock Text="Accès rapide près de l'horloge, avec un menu de toutes vos applications." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox x:Name="CloseToTrayCheck" Style="{StaticResource SwitchCheckBox}" Margin="20,6,0,6">
+                        <StackPanel>
+                            <TextBlock Text="Le bouton Fermer range dans la zone de notification"/>
+                            <TextBlock Text="Pour quitter vraiment : clic droit sur l'icône → Quitter." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox x:Name="StartupCheck" Style="{StaticResource SwitchCheckBox}" Checked="Startup_Changed" Unchecked="Startup_Changed">
+                        <StackPanel>
+                            <TextBlock Text="Démarrer avec Windows"/>
+                            <TextBlock Text="Lance le tableau de bord à l'ouverture de la session." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <CheckBox x:Name="StartMinimizedCheck" Style="{StaticResource SwitchCheckBox}" Margin="20,6,0,6">
+                        <TextBlock Text="Démarrer réduit (au démarrage de Windows)"/>
+                    </CheckBox>
+
+                    <!-- Raccourci -->
+                    <TextBlock Text="Raccourci clavier global" Style="{StaticResource SectionTitle}"/>
+                    <CheckBox x:Name="HotkeyCheck" Style="{StaticResource SwitchCheckBox}" Checked="Hotkey_Changed" Unchecked="Hotkey_Changed">
+                        <StackPanel>
+                            <TextBlock Text="Afficher / masquer le tableau de bord avec un raccourci"/>
+                            <TextBlock Text="Fonctionne depuis n'importe quelle application." Style="{StaticResource Hint}"/>
+                        </StackPanel>
+                    </CheckBox>
+                    <DockPanel Margin="0,6,0,0">
+                        <TextBlock Text="Cliquez dans le champ puis appuyez sur la combinaison voulue."
+                                   Style="{StaticResource Hint}" VerticalAlignment="Center" Margin="12,0,0,0" DockPanel.Dock="Right"
+                                   Width="230"/>
+                        <TextBox x:Name="HotkeyBox" Style="{StaticResource ModernTextBox}" IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                 Tag="Ctrl+Alt+Space" PreviewKeyDown="HotkeyBox_PreviewKeyDown" Cursor="Hand"/>
+                    </DockPanel>
+
+                    <!-- Données -->
+                    <TextBlock Text="Données" Style="{StaticResource SectionTitle}"/>
+                    <TextBlock x:Name="ConfigPathText" Style="{StaticResource Hint}" Margin="0,2,0,10"/>
+                    <WrapPanel>
+                        <Button Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Click="Export_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xEDE1;" FontFamily="{StaticResource IconFont}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Exporter…" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Click="Import_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE8B5;" FontFamily="{StaticResource IconFont}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Importer…" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource SecondaryButton}" Margin="0,0,8,8" Click="OpenFolder_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE838;" FontFamily="{StaticResource IconFont}" VerticalAlignment="Center"/>
+                                <TextBlock Text="Ouvrir le dossier" Margin="8,0,0,0"/>
+                            </StackPanel>
+                        </Button>
+                    </WrapPanel>
+                    <TextBlock Style="{StaticResource Hint}" Margin="0,4,0,0"
+                               Text="Mode portable : placez un fichier « lanceur.config.json » à côté de Lanceur.exe (par exemple via Exporter) et il sera utilisé à la place."/>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border Grid.Row="2" BorderBrush="{DynamicResource Stroke}" BorderThickness="0,1,0,0" Padding="26,14">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource SecondaryButton}" Content="Annuler" MinWidth="100" Click="Cancel_Click"/>
+                    <Button Style="{StaticResource AccentButton}" Content="Enregistrer" MinWidth="110" Margin="8,0,0,0"
+                            IsDefault="True" Click="Save_Click"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Border>
+</Window>
